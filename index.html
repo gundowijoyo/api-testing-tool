@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>API Testing Tool</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  
+<div class="container mx-auto px-4 py-8">
+<header class="text-center mb-12">
+<h1 class="text-4xl font-bold text-blue-600">API Testing Tool</h1>
+<p class="text-lg text-gray-700 mt-2">Test your APIs with ease</p>
+</header>
+
+<main class="bg-white p-8 rounded-lg shadow-lg">
+<form id="apiForm" class="mb-8">
+<div class="mb-4">
+<label for="method" class="block text-sm font-medium text-gray-700">Method</label>
+<select id="method" name="method" class="mt-1 block w-full p-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+<option>GET</option>
+<option>POST</option>
+<option>PUT</option>
+<option>DELETE</option>
+</select>
+</div>
+
+<div class="mb-4">
+<label for="url" class="block text-sm font-medium text-gray-700">URL</label>
+<input type="text" id="url" name="url" class="mt-1 p-2
+outline-none block w-full shadow-sm sm:text-sm
+border-gray-300 rounded-md"
+placeholder="https://api.example.com/endpoint">
+</div>
+
+<div class="mb-4">
+<label for="headers" class="block text-sm font-medium text-gray-700">Headers (JSON)</label>
+<textarea id="headers" name="headers" rows="3" class="p-2 outline-none mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder='{"Authorization": "Bearer token"}'></textarea>
+</div>
+
+<div class="mb-4">
+<label for="body" class="block text-sm font-medium text-gray-700">Body (JSON)</label>
+<textarea id="body" name="body" rows="5" class="mt-1 p-2 outline-none block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder='{"key": "value"}'></textarea>
+</div>
+
+<div class="flex justify-end">
+<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Send Request</button>
+</div>
+</form>
+
+<section>
+<h2 class="text-2xl font-semibold text-blue-500 mb-4">Response</h2>
+<pre id="response" class="bg-gray-100 p-4 rounded-lg overflow-auto"></pre>
+</section>
+</main>
+</div>
+
+<script>
+document.getElementById('apiForm').addEventListener('submit', function (event) {
+event.preventDefault();
+const method = document.getElementById('method').value;
+const url = document.getElementById('url').value;
+const headers = JSON.parse(document.getElementById('headers').value || '{}');
+const body = document.getElementById('body').value ? JSON.parse(document.getElementById('body').value) : null;
+
+fetch(url, {
+method: method,
+headers: headers,
+body: body ? JSON.stringify(body) : null,
+})
+.then(response => response.json())
+.then(data => {
+document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+})
+.catch(error => {
+document.getElementById('response').textContent = 'Error: ' + error.message;
+});
+});
+</script>
+</body>
+
+</html>
